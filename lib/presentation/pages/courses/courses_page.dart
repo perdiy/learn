@@ -45,8 +45,9 @@ class _CoursesPageState extends State<CoursesPage> {
             BlocBuilder<CourseBloc, CourseState>(
               builder: (context, state) {
                 return state.maybeWhen(
-                  orElse: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  orElse: () => const Center(
+                    child: SizedBox(),
+                  ),
                   loaded: (model) {
                     return Expanded(
                       child: ListView.builder(

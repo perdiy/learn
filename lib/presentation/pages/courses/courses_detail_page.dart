@@ -95,10 +95,10 @@ class _CoursesDetailPageState extends State<CoursesDetailPage> {
                               chapter['title'] ?? '',
                               style: const TextStyle(color: Colors.white),
                             ),
-                            // subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Text(
+                            // subtitle: Text(
                             //   chapter['_id'] ?? '',
                             //   style: const TextStyle(color: Colors.grey),
-                            // )],),
+                            // ),
                             leading: CircleAvatar(
                               backgroundColor: Colors.white10,
                               child: Text(

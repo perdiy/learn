@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:learn/presentation/pages/login/login_page.dart';
 import 'package:learn/theme/app_colors.dart';
-
+import '../pages/audio_book/audio_book.dart';
 import '../pages/courses/courses_page.dart';
 
 class MenuHome extends StatefulWidget {
@@ -22,7 +21,7 @@ class _MenuHomeState extends State<MenuHome> {
     _MenuItem(
       title: 'Audio Book',
       icon: Icons.book,
-      page: const LoginPage(),
+      page: const AudioBook(),
     ),
     // Tambahkan menu lain jika diperlukan
   ];

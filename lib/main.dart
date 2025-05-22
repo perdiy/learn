@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:learn/presentation/pages/Home/home_page.dart';
+
+import 'package:learn/presentation/pages/login/login_page.dart';
+
+import 'bloc/audio/audio_bloc.dart';
 import 'bloc/course/course_bloc.dart';
 import 'bloc/course_detail/course_detail_bloc.dart';
 import 'bloc/login/login_bloc.dart';
+import 'data/datasource/audio_datasource.dart';
 import 'data/datasource/auth_datasource.dart';
 import 'data/datasource/course_datasource.dart';
-import 'presentation/pages/courses/courses_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +29,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var box = Hive.box('authBox');
     String? token = box.get('token');
-
     return MultiBlocProvider(
       providers: [
-        // LOGIN
         BlocProvider(create: (context) => LoginBloc(AuthDataSource())),
-        // GET ALL COURSES
         BlocProvider(create: (context) => CourseBloc(CourseDataSource())),
-        // GET DETAIL COURSES
         BlocProvider(create: (context) => CourseDetailBloc(CourseDataSource())),
+        BlocProvider(create: (context) => AudioBloc(AudioDataSource())),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: token == null ? const CoursesPage() : const CoursesPage(),
+          home: token == null ? const LoginPage() : const HomePage(),
         ),
       ),
     );
