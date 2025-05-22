@@ -42,7 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           obscureText: widget.isPassword ? _obscureText : false,
           style: GoogleFonts.hindGuntur(
             fontSize: 16.sp,
-            color: Colors.white,
+            color: Colors.grey,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
@@ -52,21 +52,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
               color: Colors.grey,
             ),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white,
             contentPadding:
                 EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
             isDense: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.grey),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(color: Colors.grey),
+              borderSide: const BorderSide(color: Colors.grey),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: const BorderSide(color: Colors.white),
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
