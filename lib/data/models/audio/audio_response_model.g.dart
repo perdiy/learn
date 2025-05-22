@@ -11,7 +11,7 @@ _$AudioResponseModelImpl _$$AudioResponseModelImplFromJson(
     _$AudioResponseModelImpl(
       id: json['_id'] as String,
       artist: json['artist'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: json['createdAt'] as String,
       description: json['description'] as String,
       isPremium: json['isPremium'] as String,
       languange: json['languange'] as String,
@@ -30,7 +30,7 @@ Map<String, dynamic> _$$AudioResponseModelImplToJson(
     <String, dynamic>{
       '_id': instance.id,
       'artist': instance.artist,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt': instance.createdAt,
       'description': instance.description,
       'isPremium': instance.isPremium,
       'languange': instance.languange,

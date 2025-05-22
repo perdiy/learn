@@ -25,7 +25,7 @@ mixin _$AudioResponseModel {
   @JsonKey(name: "artist")
   String get artist => throw _privateConstructorUsedError;
   @JsonKey(name: "createdAt")
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: "description")
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: "isPremium")
@@ -60,7 +60,7 @@ abstract class $AudioResponseModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: "_id") String id,
       @JsonKey(name: "artist") String artist,
-      @JsonKey(name: "createdAt") DateTime createdAt,
+      @JsonKey(name: "createdAt") String createdAt,
       @JsonKey(name: "description") String description,
       @JsonKey(name: "isPremium") String isPremium,
       @JsonKey(name: "languange") String languange,
@@ -108,7 +108,7 @@ class _$AudioResponseModelCopyWithImpl<$Res, $Val extends AudioResponseModel>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -152,7 +152,7 @@ abstract class _$$AudioResponseModelImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: "_id") String id,
       @JsonKey(name: "artist") String artist,
-      @JsonKey(name: "createdAt") DateTime createdAt,
+      @JsonKey(name: "createdAt") String createdAt,
       @JsonKey(name: "description") String description,
       @JsonKey(name: "isPremium") String isPremium,
       @JsonKey(name: "languange") String languange,
@@ -198,7 +198,7 @@ class __$$AudioResponseModelImplCopyWithImpl<$Res>
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -259,7 +259,7 @@ class _$AudioResponseModelImpl implements _AudioResponseModel {
   final String artist;
   @override
   @JsonKey(name: "createdAt")
-  final DateTime createdAt;
+  final String createdAt;
   @override
   @JsonKey(name: "description")
   final String description;
@@ -357,7 +357,7 @@ abstract class _AudioResponseModel implements AudioResponseModel {
   const factory _AudioResponseModel(
           {@JsonKey(name: "_id") required final String id,
           @JsonKey(name: "artist") required final String artist,
-          @JsonKey(name: "createdAt") required final DateTime createdAt,
+          @JsonKey(name: "createdAt") required final String createdAt,
           @JsonKey(name: "description") required final String description,
           @JsonKey(name: "isPremium") required final String isPremium,
           @JsonKey(name: "languange") required final String languange,
@@ -378,7 +378,7 @@ abstract class _AudioResponseModel implements AudioResponseModel {
   String get artist;
   @override
   @JsonKey(name: "createdAt")
-  DateTime get createdAt;
+  String get createdAt;
   @override
   @JsonKey(name: "description")
   String get description;

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ class CardAudio extends StatefulWidget {
   final String title;
   final String artist;
   final String img;
+  final String url;
 
   final VoidCallback? onTap;
 
@@ -17,6 +19,7 @@ class CardAudio extends StatefulWidget {
     required this.artist,
     required this.img,
     required this.onTap,
+    required this.url,
   });
 
   @override
@@ -24,6 +27,29 @@ class CardAudio extends StatefulWidget {
 }
 
 class _CardAudioState extends State<CardAudio> {
+  Duration _duration = Duration.zero;
+
+  late AudioPlayer _audioPlayer;
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.setSource(UrlSource(widget.url));
+
+    _audioPlayer.onDurationChanged.listen((d) {
+      setState(() {
+        _duration = d;
+      });
+    });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -88,7 +114,7 @@ class _CardAudioState extends State<CardAudio> {
                         ),
                         SizedBox(width: 5.w),
                         Text(
-                          '45 min',
+                          _formatDuration(_duration),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.hindGuntur(

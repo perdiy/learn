@@ -17,7 +17,6 @@ class _AudioBookState extends State<AudioBook> {
   @override
   void initState() {
     super.initState();
-
     context.read<AudioBloc>().add(const AudioEvent.get());
   }
 
@@ -54,6 +53,7 @@ class _AudioBookState extends State<AudioBook> {
                         itemBuilder: (context, index) {
                           final item = model[index];
                           return CardAudio(
+                              url: item.path[0].url,
                               id: item.id,
                               title: item.title,
                               artist: item.artist,
@@ -63,21 +63,20 @@ class _AudioBookState extends State<AudioBook> {
                                   PageRouteBuilder(
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        const AudioPage(
-                                      artist: 'Nama Artist',
-                                      url: 'https://example.com/audio.mp3',
-                                      img: 'https://example.com/image.jpg',
-                                      title: 'Judul Audio',
-                                      languange: 'ID',
+                                        AudioPage(
+                                      waktu: item.createdAt,
+                                      premium: item.isPremium,
+                                      artist: item.artist,
+                                      url: item.path[0].url,
+                                      img: item.thumbnail[0].url,
+                                      title: item.title,
+                                      languange: item.languange,
                                     ),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
-                                      const begin =
-                                          Offset(0.0, 1.0); // dari bawah
-                                      const end =
-                                          Offset.zero; // ke posisi normal
+                                      const begin = Offset(0.0, 1.0);
+                                      const end = Offset.zero;
                                       const curve = Curves.ease;
-
                                       var tween =
                                           Tween(begin: begin, end: end).chain(
                                         CurveTween(curve: curve),

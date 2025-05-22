@@ -7,7 +7,7 @@ class AudioResponseModel with _$AudioResponseModel {
   const factory AudioResponseModel({
     @JsonKey(name: "_id") required String id,
     @JsonKey(name: "artist") required String artist,
-    @JsonKey(name: "createdAt") required DateTime createdAt,
+    @JsonKey(name: "createdAt") required String createdAt,
     @JsonKey(name: "description") required String description,
     @JsonKey(name: "isPremium") required String isPremium,
     @JsonKey(name: "languange") required String languange,
