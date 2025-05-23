@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:learn/theme/app_colors.dart';
+import '../../data/datasource/local_datasource.dart';
 import '../pages/audio_book/audio_book.dart';
 import '../pages/courses/courses_page.dart';
+import '../pages/login/login_page.dart';
 
 class MenuHome extends StatefulWidget {
   const MenuHome({super.key});
@@ -12,7 +16,30 @@ class MenuHome extends StatefulWidget {
 }
 
 class _MenuHomeState extends State<MenuHome> {
-  final List<_MenuItem> menuItems = [
+  final LocalDataSource _localDataSource = LocalDataSource();
+
+  Future<void> _logout() async {
+    await _localDataSource.clearToken();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+      (route) => false,
+    );
+  }
+
+  void _showLogoutDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.bottomSlide,
+      title: 'Konfirmasi Logout',
+      desc: 'Apakah Anda yakin ingin keluar?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: _logout,
+    ).show();
+  }
+
+  late final List<_MenuItem> menuItems = [
     _MenuItem(
       title: 'Courses',
       icon: Icons.play_circle,
@@ -23,7 +50,11 @@ class _MenuHomeState extends State<MenuHome> {
       icon: Icons.book,
       page: const AudioBook(),
     ),
-    // Tambahkan menu lain jika diperlukan
+    _MenuItem(
+      title: 'Logout',
+      icon: Icons.logout,
+      onTap: _showLogoutDialog,
+    ),
   ];
 
   @override
@@ -44,10 +75,14 @@ class _MenuHomeState extends State<MenuHome> {
           final item = menuItems[index];
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => item.page),
-              );
+              if (item.onTap != null) {
+                item.onTap!();
+              } else if (item.page != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => item.page!),
+                );
+              }
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -87,11 +122,13 @@ class _MenuHomeState extends State<MenuHome> {
 class _MenuItem {
   final String title;
   final IconData icon;
-  final Widget page;
+  final Widget? page;
+  final VoidCallback? onTap;
 
   _MenuItem({
     required this.title,
     required this.icon,
-    required this.page,
+    this.page,
+    this.onTap,
   });
 }
