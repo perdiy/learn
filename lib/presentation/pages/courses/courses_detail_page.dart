@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:learn/presentation/pages/courses/video_page.dart';
 import '../../../bloc/course_detail/course_detail_bloc.dart';
+import '../../../bloc/lesson/lesson_bloc.dart';
 
 class CoursesDetailPage extends StatefulWidget {
   final String idCourses;
@@ -18,12 +19,15 @@ class CoursesDetailPage extends StatefulWidget {
 }
 
 class _CoursesDetailPageState extends State<CoursesDetailPage> {
+  int? expandedIndex;
+
   @override
   void initState() {
     super.initState();
     context
         .read<CourseDetailBloc>()
         .add(CourseDetailEvent.get(widget.idCourses));
+    context.read<LessonBloc>().add(const LessonEvent.get());
   }
 
   @override
@@ -79,7 +83,6 @@ class _CoursesDetailPageState extends State<CoursesDetailPage> {
                   ),
 
                   SizedBox(height: 5.h),
-
                   // List Chapter
                   Expanded(
                     child: ListView.builder(
@@ -87,26 +90,88 @@ class _CoursesDetailPageState extends State<CoursesDetailPage> {
                       itemCount: widget.chapterList.length,
                       itemBuilder: (context, index) {
                         final chapter = widget.chapterList[index];
-                        return Card(
-                          color: Colors.grey[900],
-                          margin: EdgeInsets.symmetric(vertical: 5.h),
-                          child: ListTile(
-                            title: Text(
-                              chapter['title'] ?? '',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            // subtitle: Text(
-                            //   chapter['_id'] ?? '',
-                            //   style: const TextStyle(color: Colors.grey),
-                            // ),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.white10,
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(color: Colors.white),
+                        final isExpanded = expandedIndex == index;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              color: Colors.grey[900],
+                              margin: EdgeInsets.symmetric(vertical: 5.h),
+                              child: ListTile(
+                                title: Text(
+                                  chapter['title'] ?? '',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.white10,
+                                  child: Text(
+                                    '${index + 1}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  isExpanded
+                                      ? Icons.expand_less
+                                      : Icons.expand_more,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    expandedIndex = isExpanded ? null : index;
+                                  });
+                                },
                               ),
                             ),
-                          ),
+
+                            // Subchapter tampil saat expanded
+                            if (isExpanded)
+                              BlocBuilder<LessonBloc, LessonState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                    orElse: () => const Center(
+                                      child: SizedBox(),
+                                    ),
+                                    loaded: (model) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: model.map<Widget>((item) {
+                                          return Card(
+                                            color: Colors.grey,
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 5.h),
+                                            child: ListTile(
+                                              title: Text(
+                                                item.title,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              trailing: const Icon(
+                                                Icons.play_circle_fill,
+                                                color: Colors.white,
+                                                size: 30,
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          VideoPage(
+                                                              title: item.title,
+                                                              url: item.path[0]
+                                                                  .url)),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        }).toList(),
+                                      );
+                                    },
+                                  );
+                                },
+                              )
+                          ],
                         );
                       },
                     ),

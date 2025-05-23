@@ -9,10 +9,12 @@ import 'package:learn/presentation/pages/login/login_page.dart';
 import 'bloc/audio/audio_bloc.dart';
 import 'bloc/course/course_bloc.dart';
 import 'bloc/course_detail/course_detail_bloc.dart';
+import 'bloc/lesson/lesson_bloc.dart';
 import 'bloc/login/login_bloc.dart';
 import 'data/datasource/audio_datasource.dart';
 import 'data/datasource/auth_datasource.dart';
 import 'data/datasource/course_datasource.dart';
+import 'data/datasource/lesson_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CourseBloc(CourseDataSource())),
         BlocProvider(create: (context) => CourseDetailBloc(CourseDataSource())),
         BlocProvider(create: (context) => AudioBloc(AudioDataSource())),
+        BlocProvider(create: (context) => LessonBloc(LessonDataSource())),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
