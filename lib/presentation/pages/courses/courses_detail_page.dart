@@ -153,11 +153,24 @@ class _CoursesDetailPageState extends State<CoursesDetailPage> {
                                                 size: 30,
                                               ),
                                               onTap: () {
+                                                final titles = model
+                                                    .map((e) => e.title)
+                                                    .toList();
+                                                final urls = model
+                                                    .map((e) => e.path[0].url)
+                                                    .toList();
+                                                final initialIndex =
+                                                    model.indexOf(item);
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           VideoPage(
+                                                              titles: titles,
+                                                              urls: urls,
+                                                              initialIndex:
+                                                                  initialIndex,
+                                                              id: item.id,
                                                               title: item.title,
                                                               url: item.path[0]
                                                                   .url)),

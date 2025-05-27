@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:learn/presentation/pages/Home/home_page.dart';
-
-import 'package:learn/presentation/pages/login/login_page.dart';
+import 'package:learn/presentation/pages/on_boarding/on_boarding.dart';
 
 import 'bloc/audio/audio_bloc.dart';
 import 'bloc/course/course_bloc.dart';
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: token == null ? const LoginPage() : const HomePage(),
+          home: token == null ? const OnBoarding() : const HomePage(),
         ),
       ),
     );

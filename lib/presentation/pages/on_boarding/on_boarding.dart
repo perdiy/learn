@@ -1,135 +1,148 @@
-// // ignore_for_file: use_build_context_synchronously
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:perdiy/data/datasource/local_datasource.dart';
-// import 'package:perdiy/data/models/login/request/login_request_model.dart';
-// import 'package:perdiy/presentation/page/auth/register_page.dart';
-// import 'package:perdiy/presentation/page/home_page.dart';
-// import 'package:perdiy/presentation/widgets/custome_textfield.dart';
-// import '../../../bloc/login/login_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:learn/presentation/pages/login/login_page.dart';
+import 'package:learn/theme/app_colors.dart';
 
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({super.key});
+class OnBoarding extends StatefulWidget {
+  const OnBoarding({super.key});
 
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
+  @override
+  State<OnBoarding> createState() => _OnBoardingState();
+}
 
-// class _LoginPageState extends State<LoginPage> {
-//   final TextEditingController _emailController = TextEditingController();
-//   final TextEditingController _passwordController = TextEditingController();
-//   bool _isPasswordVisible = false;
-//   final LocalDataSource _localDataSource = LocalDataSource();
+class _OnBoardingState extends State<OnBoarding> {
+  int _currentIndex = 0;
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadSavedCredentials();
-//   }
+  final List<Map<String, String>> onboardingData = [
+    {
+      "image": "assets/images/slide 1.png",
+      "title": "Upgrade skills,\nShow off credentials!",
+      "desc":
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis accumsan.",
+    },
+    {
+      "image": "assets/images/slide 2.png",
+      "title": "Learn at your\nown pace",
+      "desc":
+          "Fusce sed tristique metus. Integer tincidunt, urna non congue viverra.",
+    },
+    {
+      "image": "assets/images/slide 3.png",
+      "title": "Get certified\nand hired!",
+      "desc":
+          "Aliquam erat volutpat. Aenean luctus, augue ac placerat gravida.",
+    },
+  ];
 
-//   Future<void> _loadSavedCredentials() async {
-//     String? savedEmail = await _localDataSource.getEmail();
-//     String? savedPassword = await _localDataSource.getPassword();
-//     if (savedEmail != null && savedPassword != null) {
-//       setState(() {
-//         _emailController.text = savedEmail;
-//         _passwordController.text = savedPassword;
-//       });
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Login')),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             CustomTextField(
-//               controller: _emailController,
-//               label: 'Email',
-//               keyboardType: TextInputType.emailAddress,
-//             ),
-//             const SizedBox(height: 16),
-//             CustomTextField(
-//               controller: _passwordController,
-//               label: 'Password',
-//               obscureText: !_isPasswordVisible,
-//               onToggleVisibility: () {
-//                 setState(() {
-//                   _isPasswordVisible = !_isPasswordVisible;
-//                 });
-//               },
-//             ),
-//             const SizedBox(height: 24),
-//             BlocConsumer<LoginBloc, LoginState>(
-//               listener: (context, state) async {
-//                 state.maybeWhen(
-//                   erorr: (message) {
-//                     // print(message);
-//                   },
-//                   loaded: (model) async {
-//                     await _localDataSource.saveToken(model.token);
-//                     Navigator.pushAndRemoveUntil(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) => const HomePage(),
-//                       ),
-//                       (route) => false,
-//                     );
-//                   },
-//                   orElse: () {},
-//                 );
-//               },
-//               builder: (context, state) {
-//                 return state.maybeWhen(
-//                   loading: () => const Center(
-//                     child: CircularProgressIndicator(),
-//                   ),
-//                   orElse: () {
-//                     return Column(
-//                       children: [
-//                         SizedBox(
-//                           width: double.infinity,
-//                           child: ElevatedButton(
-//                             onPressed: () {
-//                               final email = _emailController.text.trim();
-//                               final password = _passwordController.text.trim();
-
-//                               context.read<LoginBloc>().add(
-//                                     LoginEvent.login(
-//                                       LoginRequestModel(
-//                                         email: email,
-//                                         password: password,
-//                                       ),
-//                                     ),
-//                                   );
-//                             },
-//                             child: const Text('Login'),
-//                           ),
-//                         ),
-//                         TextButton(
-//                           onPressed: () {
-//                             Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                 builder: (context) => const RegisterPage(),
-//                               ),
-//                             );
-//                           },
-//                           child: const Text('Belum punya akun? Daftar di sini'),
-//                         ),
-//                       ],
-//                     );
-//                   },
-//                 );
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CarouselSlider.builder(
+                      itemCount: onboardingData.length,
+                      options: CarouselOptions(
+                        height: 600.h,
+                        enlargeCenterPage: true,
+                        enableInfiniteScroll: false,
+                        viewportFraction: 1.0,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                      ),
+                      itemBuilder: (context, index, realIdx) {
+                        final item = onboardingData[index];
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 50.h),
+                            Center(
+                              child: Image.asset(
+                                item["image"]!,
+                                height: 260.h,
+                              ),
+                            ),
+                            SizedBox(height: 50.h),
+                            Text(
+                              item["title"]!,
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.poppins(
+                                fontSize: 28.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              item["desc"]!,
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.hindGuntur(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        onboardingData.length,
+                        (index) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: _currentIndex == index ? 16.w : 8.w,
+                          height: 8.h,
+                          decoration: BoxDecoration(
+                            color: _currentIndex == index
+                                ? AppColors.red
+                                : Colors.grey,
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Skip',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
