@@ -18,7 +18,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "1.0.0" # Ganti sesuai versi project kamu
+          flutter-version: "3.27.1"
 
       - name: Install dependencies
         run: flutter pub get
