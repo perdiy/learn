@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var box = Hive.box('authBox');
-    String? token = box.get('token');
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginBloc(AuthDataSource())),
@@ -42,9 +42,15 @@ class MyApp extends StatelessWidget {
         designSize: const Size(375, 812),
         minTextAdapt: true,
         splitScreenMode: true,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: token == null ? const OnBoarding() : const HomePage(),
+        child: ValueListenableBuilder(
+          valueListenable: box.listenable(keys: ['token']),
+          builder: (context, Box box, _) {
+            final String? token = box.get('token');
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: token == null ? const OnBoarding() : const HomePage(),
+            );
+          },
         ),
       ),
     );
