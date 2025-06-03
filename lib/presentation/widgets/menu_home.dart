@@ -19,7 +19,7 @@ class _MenuHomeState extends State<MenuHome> {
   final LocalDataSource _localDataSource = LocalDataSource();
 
   Future<void> _logout() async {
-    await _localDataSource.clearToken();
+    await _localDataSource.removeAuthData();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),

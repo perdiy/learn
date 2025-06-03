@@ -1,45 +1,31 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/login/response/login_response_model.dart';
 
 class LocalDataSource {
-  static const String _authBox = 'authBox';
-  static const String _tokenKey = 'token';
-  static const String _emailKey = 'savedEmail';
-  static const String _passwordKey = 'savedPassword';
-
-  late Box _box;
-
-  // Inisialisasi, harus dipanggil sekali sebelum menggunakan
-  Future<void> init() async {
-    _box = await Hive.openBox(_authBox);
+  Future<String> getToken() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final authJson = pref.getString('auth') ?? '';
+    final authData = LoginResponseModel.fromJson(jsonDecode(authJson));
+    return authData.token ?? '';
   }
 
-  Future<void> saveToken(String token) async {
-    await _box.put(_tokenKey, token);
+  Future<bool> saveAuthData(LoginResponseModel model) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final res = await pref.setString('auth', jsonEncode(model.toJson()));
+    return res;
   }
 
-  Future<String?> getToken() async {
-    return _box.get(_tokenKey);
+  Future<bool> isLogin() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final authJson = pref.getString('auth') ?? '';
+    return authJson.isNotEmpty;
   }
 
-  Future<void> clearToken() async {
-    await _box.delete(_tokenKey);
-  }
-
-  Future<void> saveCredentials(String email, String password) async {
-    await _box.put(_emailKey, email);
-    await _box.put(_passwordKey, password);
-  }
-
-  Future<String?> getEmail() async {
-    return _box.get(_emailKey);
-  }
-
-  Future<String?> getPassword() async {
-    return _box.get(_passwordKey);
-  }
-
-  Future<void> clearCredentials() async {
-    await _box.delete(_emailKey);
-    await _box.delete(_passwordKey);
+  Future<void> removeAuthData() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.remove('auth');
   }
 }

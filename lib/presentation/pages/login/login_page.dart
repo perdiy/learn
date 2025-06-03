@@ -24,7 +24,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final LocalDataSource _localDataSource = LocalDataSource();
 
   @override
   void dispose() {
@@ -104,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                         ).show();
                       },
                       loaded: (model) async {
-                        await _localDataSource.saveToken(model.token ?? '');
+                        LocalDataSource().saveAuthData(model);
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
