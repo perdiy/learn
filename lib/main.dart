@@ -14,12 +14,11 @@ import 'data/datasource/audio_datasource.dart';
 import 'data/datasource/auth_datasource.dart';
 import 'data/datasource/course_datasource.dart';
 import 'data/datasource/lesson_datasource.dart';
+import 'data/datasource/local_datasource.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('authBox');
-
   runApp(const MyApp());
 }
 
@@ -28,31 +27,39 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box('authBox');
+    return FutureBuilder<String?>(
+      future: LocalDataSource().getToken(),
+      builder: (context, snapshot) {
+        // Saat masih loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
+        }
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => LoginBloc(AuthDataSource())),
-        BlocProvider(create: (context) => CourseBloc(CourseDataSource())),
-        BlocProvider(create: (context) => CourseDetailBloc(CourseDataSource())),
-        BlocProvider(create: (context) => AudioBloc(AudioDataSource())),
-        BlocProvider(create: (context) => LessonBloc(LessonDataSource())),
-      ],
-      child: ScreenUtilInit(
-        designSize: const Size(375, 812),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        child: ValueListenableBuilder(
-          valueListenable: box.listenable(keys: ['token']),
-          builder: (context, Box box, _) {
-            final String? token = box.get('token');
-            return MaterialApp(
+        // Saat selesai loading
+        final hasToken = snapshot.data != null;
+
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => LoginBloc(AuthDataSource())),
+            BlocProvider(create: (context) => CourseBloc(CourseDataSource())),
+            BlocProvider(
+                create: (context) => CourseDetailBloc(CourseDataSource())),
+            BlocProvider(create: (context) => AudioBloc(AudioDataSource())),
+            BlocProvider(create: (context) => LessonBloc(LessonDataSource())),
+          ],
+          child: ScreenUtilInit(
+            designSize: const Size(375, 812),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: token == null ? const OnBoarding() : const HomePage(),
-            );
-          },
-        ),
-      ),
+              home: hasToken ? const HomePage() : const OnBoarding(),
+            ),
+          ),
+        );
+      },
     );
   }
 }

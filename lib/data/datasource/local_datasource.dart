@@ -6,46 +6,48 @@ class LocalDataSource {
   static const String _emailKey = 'savedEmail';
   static const String _passwordKey = 'savedPassword';
 
-  /// Simpan token ke Hive
+  static Box? _box;
+
+  Future<Box> _getBox() async {
+    if (_box == null || !_box!.isOpen) {
+      _box = await Hive.openBox(_authBox);
+    }
+    return _box!;
+  }
+
   Future<void> saveToken(String token) async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     await box.put(_tokenKey, token);
   }
 
-  /// Ambil token dari Hive
   Future<String?> getToken() async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     return box.get(_tokenKey);
   }
 
-  /// Hapus token dari Hive (Logout)
   Future<void> clearToken() async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     await box.delete(_tokenKey);
   }
 
-  /// Simpan email dan password untuk "ingat saya"
   Future<void> saveCredentials(String email, String password) async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     await box.put(_emailKey, email);
     await box.put(_passwordKey, password);
   }
 
-  /// Ambil email yang tersimpan
   Future<String?> getEmail() async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     return box.get(_emailKey);
   }
 
-  /// Ambil password yang tersimpan
   Future<String?> getPassword() async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     return box.get(_passwordKey);
   }
 
-  /// Hapus email dan password (opsional)
   Future<void> clearCredentials() async {
-    var box = await Hive.openBox(_authBox);
+    final box = await _getBox();
     await box.delete(_emailKey);
     await box.delete(_passwordKey);
   }
